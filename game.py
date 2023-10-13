@@ -1,4 +1,5 @@
 import pygame
+import sys
 import time
 
 pygame.init()
@@ -12,5 +13,8 @@ pygame.display.flip()
 
 while True:
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
-            print("Nope not today, this game runs 4eva")
+            pygame.quit()
+            print("Thanks for playing")
+            sys.exit()
