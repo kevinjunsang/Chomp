@@ -1,0 +1,8 @@
+TILE_SIZE = 64  # tiles are squares height == width
+SCREEN_WIDTH = 10 * TILE_SIZE
+SCREEN_HEIGHT = 10 * TILE_SIZE
+
+# COLORS
+WATER_COLOR = (114, 159, 232)
+SAND_COLOR = (100, 25, 0)
+BLACK = (0, 0, 0)
