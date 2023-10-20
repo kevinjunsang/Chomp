@@ -28,8 +28,9 @@ eal_head = pygame.transform.flip(eal_head, True, False)
 eal_tail = pygame.transform.flip(eal_tail, True, False)
 # blit sand tiles across the bottom of the screen
 
-my_fish = fish.Fish(200, 200)
+my_fish = fish.Fish("pufferfish", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 background = screen.copy()
+clock = pygame.time.Clock()
 def draw_background():
     for i in range(SCREEN_WIDTH // TILE_SIZE):
         background.blit(sand,
@@ -58,21 +59,35 @@ def draw_background():
 draw_background()
 
 while True:
+    # listen for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             print("Thanks for playing")
             sys.exit()
-        if event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                my_fish.move_left()
+                my_fish.moving_left = True
             if event.key == pygame.K_RIGHT:
-                my_fish.move_right()
+                my_fish.moving_right = True
             if event.key == pygame.K_DOWN:
-                my_fish.move_down()
+                my_fish.moving_down = True
             if event.key == pygame.K_UP:
-                my_fish.move_up()
-    # update the game screen
+                my_fish.moving_up = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                my_fish.moving_left = False
+            if event.key == pygame.K_RIGHT:
+                my_fish.moving_right = False
+            if event.key == pygame.K_DOWN:
+                my_fish.moving_down = False
+            if event.key == pygame.K_UP:
+                my_fish.moving_up = False
+    # update game objects
+
+    # draw the game screen
+    my_fish.update()
     screen.blit(background, (0, 0))
     my_fish.draw(screen)
     pygame.display.flip()
+    clock.tick(60)
