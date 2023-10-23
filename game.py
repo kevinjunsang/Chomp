@@ -3,6 +3,7 @@ import sys
 import time
 import random
 import fish
+import minnow
 from settings import *
 
 pygame.init()
@@ -28,7 +29,11 @@ eal_head = pygame.transform.flip(eal_head, True, False)
 eal_tail = pygame.transform.flip(eal_tail, True, False)
 # blit sand tiles across the bottom of the screen
 
-my_fish = fish.Fish("pufferfish", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+my_fish = fish.Fish("nemo_fish", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+my_minnows = []
+for i in range(NUM_MINNOWS):
+    my_minnows.append(minnow.Minnow(random.randint(0, SCREEN_WIDTH - TILE_SIZE),
+                                    random.randint(0, WATER_BOTTOM - TILE_SIZE)))
 background = screen.copy()
 clock = pygame.time.Clock()
 def draw_background():
@@ -49,8 +54,8 @@ def draw_background():
                      y_val))
     # draw the CHOMP! title
     text = game_font.render("Chomp!", True, BLACK)
-    background.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2,
-                       SCREEN_HEIGHT // 2 - text.get_height() // 2))
+    # background.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2,
+    #                   SCREEN_HEIGHT // 2 - text.get_height() // 2))
     pygame.display.flip()
 # screen.blit(fish,(SCREEN_WIDTH // 2 - TILE_SIZE // 2,SCREEN_HEIGHT // 2 - TILE_SIZE // 2))
 # can designate by just identifying the top left corner
@@ -83,11 +88,21 @@ while True:
                 my_fish.moving_down = False
             if event.key == pygame.K_UP:
                 my_fish.moving_up = False
+        for minnow in my_minnows:
+            if minnow.rect.colliderect(my_fish.rect):
+                minnow.life = False
     # update game objects
 
     # draw the game screen
     my_fish.update()
+    for minnow in my_minnows:
+        if minnow.life:
+            minnow.update()
+        else:
+            minnow.dead()
     screen.blit(background, (0, 0))
     my_fish.draw(screen)
+    for minnow in my_minnows:
+        minnow.draw(screen)
     pygame.display.flip()
     clock.tick(60)
